@@ -6,22 +6,11 @@ export function exportDesignMd(doc: DesignSystemDocument): string {
   const t = doc.tokens.typography
   const s = doc.tokens.shape
 
-  return `# ${doc.name}
-
-## Role
-
-This file is the AI-readable design contract for this project.
-
-## Source
-
-- Kind: ${doc.source.kind}
-- Label: ${doc.source.label}
-- Updated: ${doc.updatedAt}
-
-## Tokens
-
-\`\`\`yaml
-color:
+  return `---
+version: alpha
+name: ${doc.name}
+description: AI-readable design system exported from Popskraft Design System Knowledge Core.
+colors:
   primary: "${c.primary}"
   secondary: "${c.secondary}"
   accent: "${c.accent}"
@@ -33,24 +22,70 @@ color:
   text: "${c.text}"
   border: "${c.border}"
 typography:
-  headingFont: ${t.headingFont}
-  bodyFont: ${t.bodyFont}
-  headingWeight: ${t.fwHeading}
-  baseSize: ${t.fontSize}px
-  lineHeight: ${t.lineHeight}
-shape:
-  radiusSmall: ${s.rSm}px
-  radiusMedium: ${s.rMd}px
-  radiusLarge: ${s.rLg}px
-  radiusXL: ${s.rXl}px
-  spacingUnit: ${s.sp}px
-\`\`\`
+  h1:
+    fontFamily: ${t.headingFont}
+    fontSize: 48px
+    fontWeight: ${t.fwHeading}
+    lineHeight: 1.1
+  body:
+    fontFamily: ${t.bodyFont}
+    fontSize: ${t.fontSize}px
+    fontWeight: 400
+    lineHeight: ${t.lineHeight}
+rounded:
+  sm: ${s.rSm}px
+  md: ${s.rMd}px
+  lg: ${s.rLg}px
+  xl: ${s.rXl}px
+spacing:
+  base: ${s.sp}px
+  xs: ${s.sp}px
+  sm: ${s.sp * 2}px
+  md: ${s.sp * 4}px
+  lg: ${s.sp * 6}px
+components:
+${doc.components.map(component => `  ${component.id}:
+    role: ${component.role}
+    notes: ${component.notes}`).join('\n')}
+---
+
+# ${doc.name}
+
+## Overview
+
+This file is the AI-readable design contract for this project.
+
+## Source
+
+- Kind: ${doc.source.kind}
+- Label: ${doc.source.label}
+- Updated: ${doc.updatedAt}
+
+## Colors
+
+Use primary color for core actions and identity. Use secondary for support UI, accent for selective emphasis, background and surface for layout layers, text for readable content, and border for separation.
+
+## Typography
+
+Headings use ${t.headingFont} at weight ${t.fwHeading}. Body text uses ${t.bodyFont} at ${t.fontSize}px with ${t.lineHeight} line height.
+
+## Layout
+
+Use a ${s.sp}px spacing base with consistent grouping, visible hierarchy, and responsive layout behavior.
+
+## Elevation & Depth
+
+Use borders and shadows intentionally. Avoid decorative depth that does not communicate interaction or hierarchy.
+
+## Shapes
+
+Use ${s.rMd}px as the default control radius, ${s.rLg}px for cards, and ${s.rXl}px for larger panels.
 
 ## Components
 
 ${doc.components.map(component => `- ${component.name}: ${component.role}. ${component.notes}`).join('\n')}
 
-## Frontend Rules
+## Do's and Don'ts
 
 - Bind UI to semantic tokens before primitive values.
 - Validate empty, loading, error, success, dense data, mobile, and focus states.
