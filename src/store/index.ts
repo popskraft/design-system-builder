@@ -14,6 +14,7 @@ import type {
   EffectsTokens,
 } from '../types'
 import { createDocument } from '../lib/defaults'
+import { importDesignMd } from '../lib/import/designMd'
 
 interface UIState {
   activeTab: EditorTab
@@ -45,6 +46,7 @@ interface AppState {
   saveDocument(): Promise<void>
   deleteDocument(id: string): Promise<void>
   renameDocument(id: string, name: string): Promise<void>
+  importDesignMdSource(markdown: string): Promise<void>
 
   // Actions — tokens
   setColors(colors: Partial<ColorTokens>): void
@@ -138,6 +140,20 @@ export const useStore = create<AppState>()(
         if (s.currentDoc?.id === id) s.currentDoc.name = name
       })
       await get().loadDocList()
+    },
+
+    async importDesignMdSource(markdown) {
+      const { adapter, currentDoc } = get()
+      const doc = importDesignMd(markdown, currentDoc ?? undefined)
+      set(s => {
+        s.currentDoc = doc
+        s.ui.activeTab = 'export'
+      })
+      if (adapter) {
+        await adapter.save(doc)
+        await get().loadDocList()
+      }
+      get().showToast('DESIGN.md imported')
     },
 
     setColors(colors) {

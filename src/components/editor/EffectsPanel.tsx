@@ -15,7 +15,7 @@ export function EffectsPanel() {
   if (!currentDoc) return null
   const e = currentDoc.tokens.effects
 
-  const selectCls = "w-full bg-slate-900 border border-slate-700 text-slate-200 text-[12px] px-2 py-1.5 rounded-md mb-3 focus:outline-none focus:border-blue-500 cursor-pointer"
+  const selectCls = "w-full bg-white border border-[#e6e4dc] text-[#4d4d4d] text-[12px] px-2 py-1.5 rounded-md mb-3 focus:outline-none focus:border-[#2f6f5e] cursor-pointer"
 
   return (
     <div>

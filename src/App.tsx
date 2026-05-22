@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useStore } from './store'
 import { LocalStorageAdapter } from './storage/LocalStorageAdapter'
+import { createDocument } from './lib/defaults'
 import { Sidebar } from './components/editor/Sidebar'
 import { PreviewFrame } from './components/preview/PreviewFrame'
 import { clsx } from 'clsx'
@@ -17,7 +18,6 @@ export default function App() {
   const {
     setAdapter,
     loadDocList,
-    newDocument,
     ui,
     setPreviewSection,
     setPreviewMode,
@@ -25,47 +25,48 @@ export default function App() {
     currentDoc,
   } = useStore()
 
-  // Init adapter + auto-load first project
   useEffect(() => {
     const adapter = new LocalStorageAdapter()
     setAdapter(adapter)
 
     adapter.list().then(async list => {
       if (list.length === 0) {
-        await newDocument('My Design System')
+        const doc = createDocument('Universal design system')
+        await adapter.save(doc)
+        useStore.setState({ currentDoc: doc })
+        await loadDocList()
       } else {
         await loadDocList()
         const doc = await adapter.load(list[0].id)
         if (doc) useStore.setState({ currentDoc: doc })
       }
     })
-  }, [])
+  }, [loadDocList, setAdapter])
 
-  // Auto-save on token change (debounced 800ms)
   useEffect(() => {
     if (!currentDoc) return
     const timer = setTimeout(() => saveDocument(), 800)
     return () => clearTimeout(timer)
-  }, [currentDoc?.tokens])
+  }, [currentDoc, currentDoc?.tokens, saveDocument])
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: '#0f172a' }}>
+    <div className="flex h-screen overflow-hidden bg-[#f7f7f4]">
       <Sidebar />
 
       {/* Main area */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Preview toolbar */}
-        <div className="flex items-center justify-between px-6 h-12 border-b border-slate-800 flex-shrink-0">
-          <div className="flex gap-1">
+        <div className="flex items-center justify-between px-5 h-11 border-b border-[#e6e4dc] bg-white flex-shrink-0">
+          <div className="flex gap-0.5">
             {SECTIONS.map(s => (
               <button
                 key={s.id}
                 onClick={() => setPreviewSection(s.id)}
                 className={clsx(
-                  'px-3.5 py-1.5 text-[11px] rounded-md transition-colors tracking-wide focus-visible:outline-none',
+                  'px-3 py-1.5 text-[12px] rounded-md transition-colors focus-visible:outline-none',
                   ui.previewSection === s.id
-                    ? 'bg-slate-700 border border-slate-600 text-slate-100'
-                    : 'text-slate-500 hover:text-slate-300 border border-transparent'
+                    ? 'bg-[#f0efeb] text-[#171717] font-medium'
+                    : 'text-[#737373] hover:text-[#171717] hover:bg-[#f7f7f4]'
                 )}
               >
                 {s.label}
@@ -73,16 +74,16 @@ export default function App() {
             ))}
           </div>
 
-          <div className="flex bg-slate-800 border border-slate-700 rounded-md overflow-hidden">
+          <div className="flex bg-[#f0efeb] rounded-md p-0.5 gap-0.5">
             {(['light', 'dark'] as const).map(m => (
               <button
                 key={m}
                 onClick={() => setPreviewMode(m)}
                 className={clsx(
-                  'px-3 py-1 text-[11px] transition-colors capitalize',
+                  'px-3 py-1 text-[12px] rounded transition-colors capitalize',
                   ui.previewMode === m
-                    ? 'bg-slate-600 text-slate-100'
-                    : 'text-slate-500 hover:text-slate-300'
+                    ? 'bg-white text-[#171717] shadow-sm'
+                    : 'text-[#737373] hover:text-[#171717]'
                 )}
               >
                 {m}
@@ -101,8 +102,8 @@ export default function App() {
       <div
         className={clsx(
           'fixed bottom-6 left-1/2 -translate-x-1/2 z-50',
-          'bg-slate-800 border border-slate-600 text-slate-100',
-          'px-5 py-2.5 rounded-lg text-[12px] pointer-events-none',
+          'bg-[#171717] text-white',
+          'px-4 py-2 rounded-lg text-[12px] pointer-events-none',
           'transition-all duration-200',
           ui.toast.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
         )}

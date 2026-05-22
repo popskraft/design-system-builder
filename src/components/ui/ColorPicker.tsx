@@ -12,22 +12,22 @@ export function ColorPicker({ value, onChange, label }: Props) {
 
   return (
     <div className="flex items-center justify-between gap-2 mb-2.5">
-      {label && <span className="text-[12px] text-slate-400 flex-1 whitespace-nowrap">{label}</span>}
+      {label && <span className="text-[12px] text-[#4d4d4d] flex-1 whitespace-nowrap">{label}</span>}
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
         className={clsx(
           'flex items-center gap-1.5 px-2 py-1',
-          'bg-slate-900 border border-slate-700 rounded-md',
-          'hover:border-slate-500 transition-colors cursor-pointer',
-          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500'
+          'bg-white border border-[#e6e4dc] rounded-md',
+          'hover:border-[#4d4d4d] transition-colors cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2f6f5e]'
         )}
       >
         <span
-          className="w-5 h-5 rounded flex-shrink-0 border border-white/10"
+          className="w-5 h-5 rounded shrink-0 border border-black/10"
           style={{ background: value }}
         />
-        <span className="text-[11px] text-slate-400 font-mono min-w-[52px]">{value}</span>
+        <span className="text-[11px] text-[#737373] font-mono min-w-13">{value}</span>
         <input
           ref={inputRef}
           type="color"

@@ -9,10 +9,10 @@ export function ProjectList() {
 
   useEffect(() => {
     loadDocList()
-  }, [])
+  }, [loadDocList])
 
   const handleNew = async () => {
-    await newDocument('Untitled')
+    await newDocument('Untitled design system')
   }
 
   const handleOpen = (id: string) => {
@@ -40,17 +40,17 @@ export function ProjectList() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-5 py-3 border-b border-slate-700">
-        <span className="text-[11px] uppercase tracking-widest text-slate-500">Projects</span>
+      <div className="flex items-center justify-between px-5 h-11 border-b border-[#e6e4dc] shrink-0">
+        <span className="text-[10px] uppercase tracking-widest text-[#737373] font-medium">Systems</span>
         <button
           onClick={() => setProjectListOpen(false)}
-          className="text-slate-500 hover:text-slate-300 text-lg leading-none"
+          className="text-[#737373] hover:text-[#171717] text-lg leading-none transition-colors"
         >×</button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-1">
+      <div className="flex-1 overflow-y-auto p-3 space-y-0.5">
         {docList.length === 0 && (
-          <p className="text-slate-600 text-[12px] text-center mt-8">No projects yet</p>
+          <p className="text-[#737373] text-[12px] text-center mt-8">No systems yet</p>
         )}
         {docList.map(doc => (
           <div
@@ -59,8 +59,8 @@ export function ProjectList() {
             className={clsx(
               'flex items-center gap-2 px-3 py-2.5 rounded-md cursor-pointer group transition-colors',
               doc.id === currentDoc?.id
-                ? 'bg-slate-700 text-slate-100'
-                : 'hover:bg-slate-800 text-slate-300'
+                ? 'bg-[#f0efeb] text-[#171717]'
+                : 'hover:bg-[#f7f7f4] text-[#4d4d4d]'
             )}
           >
             <div className="flex-1 min-w-0">
@@ -72,24 +72,24 @@ export function ProjectList() {
                   onBlur={commitRename}
                   onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setRenamingId(null) }}
                   onClick={e => e.stopPropagation()}
-                  className="w-full bg-slate-900 border border-blue-500 rounded px-1 text-[13px] text-slate-100 outline-none"
+                  className="w-full bg-white border border-[#2f6f5e] rounded px-1 text-[13px] text-[#171717] outline-none"
                 />
               ) : (
                 <div className="text-[13px] truncate">{doc.name}</div>
               )}
-              <div className="text-[10px] text-slate-600 mt-0.5">
+              <div className="text-[10px] text-[#737373] mt-0.5">
                 {new Date(doc.updatedAt).toLocaleDateString()}
               </div>
             </div>
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={e => startRename(doc.id, doc.name, e)}
-                className="text-slate-500 hover:text-slate-300 text-[11px] px-1"
+                className="text-[#737373] hover:text-[#4d4d4d] text-[11px] px-1 transition-colors"
                 title="Rename"
               >✎</button>
               <button
                 onClick={e => handleDelete(doc.id, e)}
-                className="text-slate-500 hover:text-red-400 text-[11px] px-1"
+                className="text-[#737373] hover:text-[#c2410c] text-[11px] px-1 transition-colors"
                 title="Delete"
               >✕</button>
             </div>
@@ -97,12 +97,12 @@ export function ProjectList() {
         ))}
       </div>
 
-      <div className="p-3 border-t border-slate-700">
+      <div className="p-3 border-t border-[#e6e4dc]">
         <button
           onClick={handleNew}
-          className="w-full py-2 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-200 text-[12px] font-medium transition-colors"
+          className="w-full py-2 rounded-md border border-[#e6e4dc] hover:bg-[#f7f7f4] text-[#4d4d4d] text-[12px] font-medium transition-colors"
         >
-          + New project
+          + New system
         </button>
       </div>
     </div>

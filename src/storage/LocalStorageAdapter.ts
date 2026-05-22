@@ -1,4 +1,5 @@
 import type { StorageAdapter, DesignSystemDocument, DocumentMeta } from '../types'
+import { DEFAULT_COMPONENT_SPECS, createDefaultSource } from '../lib/defaults'
 
 const PREFIX = 'dsb:doc:'
 const INDEX_KEY = 'dsb:index'
@@ -11,7 +12,12 @@ function migrate(raw: unknown): DesignSystemDocument {
   if (doc?.version !== 1) {
     throw new Error(`Unknown document version: ${(raw as { version?: unknown })?.version}`)
   }
-  return doc
+  return {
+    ...doc,
+    source: doc.source ?? createDefaultSource(doc.name),
+    components: doc.components ?? DEFAULT_COMPONENT_SPECS,
+    notes: doc.notes ?? [],
+  }
 }
 
 export class LocalStorageAdapter implements StorageAdapter {

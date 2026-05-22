@@ -6,22 +6,36 @@ export function PreviewFrame() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const { currentDoc, ui } = useStore()
 
+  // Rebuild HTML when tokens, mode, or doc name change
   useEffect(() => {
     const iframe = iframeRef.current
     if (!iframe || !currentDoc) return
 
-    const html = buildPreviewHTML(
-      currentDoc.tokens,
-      ui.previewSection,
-      ui.previewMode
-    )
+    const html = buildPreviewHTML(currentDoc.tokens, ui.previewMode, currentDoc.name)
 
     const doc = iframe.contentDocument || iframe.contentWindow?.document
     if (!doc) return
     doc.open()
     doc.write(html)
     doc.close()
-  }, [currentDoc?.tokens, ui.previewSection, ui.previewMode])
+  }, [currentDoc, currentDoc?.tokens, ui.previewMode, currentDoc?.name])
+
+  // Scroll to section anchor when previewSection changes
+  useEffect(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+    const win = iframe.contentWindow
+    if (!win) return
+
+    const scrollToAnchor = () => {
+      const el = win.document.getElementById(ui.previewSection)
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }
+
+    // Give the iframe a moment to finish rendering before scrolling
+    const timer = setTimeout(scrollToAnchor, 50)
+    return () => clearTimeout(timer)
+  }, [ui.previewSection])
 
   if (!currentDoc) {
     return (

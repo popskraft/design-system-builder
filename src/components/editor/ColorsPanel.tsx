@@ -24,8 +24,8 @@ export function ColorsPanel() {
             title={p.name}
             onClick={() => setColors(p)}
             className={clsx(
-              'w-7 h-7 rounded-md border border-white/10 cursor-pointer',
-              'transition-transform hover:scale-110 hover:border-white/30',
+              'w-7 h-7 rounded-md border border-black/10 cursor-pointer',
+              'transition-transform hover:scale-110 hover:border-black/20',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500'
             )}
             style={{ background: p.primary }}
@@ -36,7 +36,7 @@ export function ColorsPanel() {
       {/* Theme presets */}
       <SectionLabel>Theme preset</SectionLabel>
       <select
-        className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-[12px] px-2 py-1.5 rounded-md mb-4 focus:outline-none focus:border-blue-500 cursor-pointer"
+        className="w-full bg-white border border-[#e6e4dc] text-[#4d4d4d] text-[12px] px-2 py-1.5 rounded-md mb-4 focus:outline-none focus:border-[#2f6f5e] cursor-pointer"
         defaultValue=""
         onChange={e => {
           const preset = THEME_PRESETS[e.target.value]
@@ -45,6 +45,7 @@ export function ColorsPanel() {
         }}
       >
         <option value="" disabled>— Apply preset —</option>
+        <option value="minigree">minigree</option>
         <option value="clean">Clean Light</option>
         <option value="dark">Dark Mode</option>
         <option value="fintech">Fintech Bold</option>

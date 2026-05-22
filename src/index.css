@@ -20,14 +20,14 @@ html, body, #root {
 }
 
 body {
-  font-family: 'DM Mono', monospace;
-  background: #0f172a;
-  color: #f1f5f9;
+  font-family: 'Inter Variable', 'Inter', sans-serif;
+  background: #f7f7f4;
+  color: #171717;
   -webkit-font-smoothing: antialiased;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar-thumb { background: #d4d0c4; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #b8b4a8; }
